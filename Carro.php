@@ -1,74 +1,117 @@
 <?php
-
-
 class Carro 
 {
-  
+  //Atributos
   public  $cor;
-  private $potencia;
-  private $capacidadeTanqueCombustivel;
-  private $marca		='Fiat';
-  private $modelo		='147';
-  private $anoFabricacao	='1986';
-  private $chassi;
+  private $quantCombustivel;
+  private static $chassi='XYZ';
   
+  //Constantes
+  const   MARCA		='Fiat';
+  const   MODELO	='147';
+  const   ANO		='1986';
   
-  public function __construct($cor = "Branco")
+  //Obj MotorBase
+  private $motor;
+  
+  //***********************************************************************************************
+  
+  public function __construct($cor = "Branco", MotorBase $motor)
   {
-    $this->cor = $cor;
+    $this->cor 	 = $cor;
+    $this->motor = $motor;
   }
+  //***********************************************************************************************
   
   public function __toString()
   {
-    return $this->marca." - ".$this->modelo." - ".$this->anoFabricacao;
+    return self::MARCA." - ".self::MODELO." - ".self::ANO;
   }
-  
+  //***********************************************************************************************
   public function __set($atributo,$valor)
   {
     $this->$atributo = $valor;
   }
-  
+  //***********************************************************************************************
   public function __get($atributo)
   {
     return $this->$atributo;
   }
-  
-  
-  
-  
-  
-  
-  private function andar()
+  //*********************************************************************************************** 
+   
+  public function ligar()
   {
+    try
+    { 
+      $quant =$this->marcadorCombustivel();    
+      
+    }catch (Exception $e)
+    {
+      echo $e->getMessage();
+    }
     
+    if($quant > 0)
+    {
+      $this->motor->ligar(true);
+    }
   }
-  
-  public function acelerar()
+  //***********************************************************************************************
+  /**
+  *   Abastece o carro
+  *   @param float $litros
+  *   @return float
+  */
+
+  public function abastercer($litros)
   {
-    
+    $this->quantCombustivel+= $litros;
+    return $this->quantCombustivel;
   }
+//***********************************************************************************************
+ public function desligar()
+ {
+      $this->motor->ligar(false);
+ } 
+//*********************************************************************************************** 
+ public function marcadorCombustivel()
+ {
+    if($this->quantCombustivel< 5)
+    {
+      throw new Exception('Combustivel esta acabando!<br>');
+    }  
+    return $this->quantCombustivel;
+ }
+//*********************************************************************************************** 
+  static public function radio()
+  {
+  echo "<br>Radio ligado!<br>";
+  echo $this->quantCombustivel;
+  }
+//***********************************************************************************************  
+  public function acelerar($potencia)
+  {
+    $torque = $this->motor->acelerar($potencia);
+    $this->andar($torque);
+    
+  }  
+//***********************************************************************************************
+
+  /**
+  *   @param float $torque
+  *   
+  */
+  private function andar($torque)
+  {
+      $combustivelGasto = $torque / 100;
+      $this->quantCombustivel-=$combustivelGasto;
+  }
+//***********************************************************************************************  
+  
   
   public function frear()
   {
   
   }
-  
-  public function ligar()
-  {
-  
-  }
-
-  public function desligar()
-  {
-    
-  }
-
-  public function abastercer()
-  {
-    
-  }
-
-
 
 
 
