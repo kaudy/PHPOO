@@ -1,0 +1,7 @@
+{
+    "name": "kaudy/phpoo",
+    "description": "aula de PHP OO",
+    "require": {
+        "monolog/monolog": "^1.21"
+    }
+}
